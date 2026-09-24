@@ -1,0 +1,14 @@
+{
+  "naam": "Tijmen",
+  "kleur": "#0d9488",
+  "fases": [
+    { "id": 1, "naam": "Oriëntatie & Onderzoek", "status": "niet-begonnen", "entries": [] },
+    { "id": 2, "naam": "Plan van Aanpak", "status": "niet-begonnen", "entries": [] },
+    { "id": 3, "naam": "Ontwerp", "status": "niet-begonnen", "entries": [] },
+    { "id": 4, "naam": "Prototype", "status": "niet-begonnen", "entries": [] },
+    { "id": 5, "naam": "Realisatie & Bouw", "status": "niet-begonnen", "entries": [] },
+    { "id": 6, "naam": "Testen & Verbeteren", "status": "niet-begonnen", "entries": [] },
+    { "id": 7, "naam": "Presentatie", "status": "niet-begonnen", "entries": [] },
+    { "id": 8, "naam": "Evaluatie & Oplevering", "status": "niet-begonnen", "entries": [] }
+  ]
+}

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d4ed8">
+<title>Autowasstraat — Sectorproject</title>
+<style>
+  :root{
+    --ink:#0f172a;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --blue:#2563eb;
+    --blue-dark:#1e40af;
+    --sky:#38bdf8;
+    --card:#ffffff;
+    --bg1:#eef6ff;
+    --bg2:#e0f2fe;
+    --shadow:0 10px 30px rgba(2,6,23,.08);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,var(--bg1) 0%,#fff 40%,var(--bg2) 100%);
+    min-height:100vh;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  [hidden]{display:none!important}
+
+  /* ---------- bubbles achtergrond ---------- */
+  .bubbles{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .bubble{position:absolute;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(56,189,248,.35),rgba(56,189,248,.08));animation:float 14s ease-in-out infinite}
+  .b1{width:180px;height:180px;top:-40px;left:-50px}
+  .b2{width:90px;height:90px;top:18%;right:6%;animation-delay:-4s}
+  .b3{width:130px;height:130px;bottom:6%;left:12%;animation-delay:-8s}
+  .b4{width:70px;height:70px;bottom:18%;right:18%;animation-delay:-2s}
+  .b5{width:110px;height:110px;top:52%;left:55%;animation-delay:-6s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-26px)}}
+
+  /* ---------- header ---------- */
+  .app-header{position:relative;z-index:1;background:linear-gradient(135deg,#1d4ed8 0%,#2563eb 45%,#3b82f6 70%,#38bdf8 100%);color:#fff;border-radius:0 0 32px 32px;box-shadow:var(--shadow)}
+  .header-in{display:flex;align-items:center;gap:16px;padding:26px 20px}
+  .brand-logo{width:54px;height:54px;border-radius:16px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px}
+  .brand h1{font-size:24px;letter-spacing:.3px}
+  .brand p{font-size:13.5px;opacity:.92}
+
+  /* ---------- knoppen ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;cursor:pointer;border:none;
+    font:inherit;font-weight:600;border-radius:12px;padding:11px 18px;transition:transform .12s ease,box-shadow .12s ease,background .12s ease;text-decoration:none;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;box-shadow:0 8px 20px rgba(37,99,235,.35)}
+  .btn-primary:hover{box-shadow:0 10px 24px rgba(37,99,235,.45)}
+  .btn-soft{background:#eff6ff;color:var(--blue-dark)}
+  .btn-soft:hover{background:#dbeafe}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .btn-ghost:hover{background:#f8fafc}
+  .btn-danger{background:#fee2e2;color:#b91c1c}
+  .btn-danger:hover{background:#fecaca}
+  .btn-sm{padding:7px 12px;font-size:13px;border-radius:10px}
+  .btn-lg{padding:13px 24px;font-size:15px}
+
+  /* ---------- secties / kaarten ---------- */
+  main{position:relative;z-index:1;padding:28px 0 60px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+
+  .section-title{font-size:22px;margin-bottom:6px}
+  .section-sub{color:var(--muted);font-size:14.5px;margin-bottom:22px}
+
+  /* persoonskeuze */
+  .person-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:6px}
+  .person-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 22px;cursor:pointer;text-align:center;transition:transform .15s ease,box-shadow .15s ease;position:relative;overflow:hidden}
+  .person-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(2,6,23,.14)}
+  .person-card::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--c,#2563eb)}
+  .avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;font-weight:800;margin:10px auto 12px;background:var(--c,#2563eb);box-shadow:0 8px 18px rgba(2,6,23,.18)}
+  .avatar-lg{width:58px;height:58px;font-size:21px;background:var(--c,#2563eb)}
+  .person-card h3{font-size:19px}
+  .person-card .p-hint{color:var(--muted);font-size:13.5px;margin-top:6px}
+
+  /* dashboard */
+  .dash-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+  .dash-head h2{font-size:24px}
+  .dash-head .chip{margin-top:4px}
+  .meta-row{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+  .actions-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+  .progress-block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 22px;margin-bottom:22px}
+  .progress-top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .progress-top strong{font-size:16px}
+  .progress-top span{color:var(--muted);font-size:14px}
+  .bar{height:14px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--sky));transition:width .5s ease}
+  .group-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;margin-bottom:22px}
+  .group-card h4{font-size:15px;margin-bottom:14px;color:var(--ink)}
+  .grow{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .grow:last-child{margin-bottom:0}
+  .grow .avatar{width:38px;height:38px;font-size:15px;margin:0}
+  .grow .g-name{width:82px;font-weight:700;font-size:14px}
+  .grow .bar{flex:1}
+  .grow .g-pct{width:44px;text-align:right;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  /* fase kaarten */
+  .phase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+  .phase-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+  .phase-card::before{content:"";position:absolute;inset:0 auto 0 0;width:6px;background:var(--c,#94a3b8)}
+  .phase-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .phase-num{width:34px;height:34px;border-radius:10px;background:#f1f5f9;color:var(--blue-dark);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+  .phase-card h3{font-size:17px;line-height:1.25}
+  .phase-card p{color:var(--muted);font-size:13.5px;line-height:1.5}
+  .phase-stats{color:var(--muted);font-size:13px}
+  .phase-thumbs{display:flex;gap:6px;flex-wrap:wrap}
+  .phase-thumbs img{width:52px;height:52px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+  .phase-card .btn{margin-top:auto}
+
+  /* chips / badges */
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:99px}
+  .chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+  .c-gray{background:#f1f5f9;color:#64748b}
+  .c-amber{background:#fef3c7;color:#92400e}
+  .c-green{background:#d1fae5;color:#065f46}
+  .c-blue{background:#dbeafe;color:#1e40af}
+  .c-ok{background:#d1fae5;color:#065f46}
+  .c-warn{background:#fef9c3;color:#854d0e}
+
+  /* fase detail */
+  .back-link{background:none;border:none;color:var(--blue-dark);font:inherit;font-weight:600;cursor:pointer;padding:4px 0;margin-bottom:14px;display:inline-flex;align-items:center;gap:6px}
+  .back-link:hover{text-decoration:underline}
+  .phase-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+  .phase-head .phase-num{width:46px;height:46px;font-size:20px;border-radius:14px}
+  .phase-head h2{font-size:23px}
+  .phase-desc{color:var(--muted);font-size:14.5px;margin-bottom:14px}
+  .status-tabs{display:inline-flex;background:#e2e8f0;border-radius:12px;padding:4px;gap:4px;margin-bottom:20px}
+  .status-tabs button{border:none;background:transparent;font:inherit;font-weight:600;font-size:13.5px;padding:8px 15px;border-radius:9px;color:var(--muted);cursor:pointer;transition:background .12s ease,color .12s ease}
+  .status-tabs button.on{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(2,6,23,.12)}
+
+  .entries{display:flex;flex-direction:column;gap:16px;margin-bottom:22px}
+  .entry{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px}
+  .entry-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .entry-date{font-size:13px;font-weight:700;color:var(--blue-dark);background:#eff6ff;padding:5px 10px;border-radius:8px}
+  .entry-actions{display:flex;gap:8px}
+  .entry-text{white-space:pre-wrap;font-size:14.5px;line-height:1.6;margin-bottom:12px}
+  .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .photo{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#f1f5f9}
+  .photo img{width:100%;height:130px;object-fit:cover;display:block;cursor:pointer}
+  .photo figcaption{font-size:11.5px;color:var(--muted);padding:4px 8px;text-align:center}
+  .empty-note{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;padding:26px;text-align:center;color:var(--muted);font-size:14px}
+
+  .add-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px 22px}
+  .add-card h4{font-size:16px;margin-bottom:14px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#334155}
+  .field input[type=text],.field input[type=date],.field textarea{
+    width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:11px;font:inherit;font-size:14px;background:#f8fafc;transition:border-color .12s ease,background .12s ease;
+  }
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:#fff}
+  .field textarea{resize:vertical;min-height:90px}
+  .file-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--blue-dark);background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:9px 14px}
+  .file-btn:hover{background:#dbeafe}
+  .pending-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .pending{position:relative;width:86px;height:86px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .pending img{width:100%;height:100%;object-fit:cover}
+  .pending button{position:absolute;top:4px;right:4px;width:22px;height:22px;border:none;border-radius:50%;background:rgba(15,23,42,.7);color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .pending button:hover{background:#b91c1c}
+  .form-actions{display:flex;gap:10px;align-items:center;margin-top:16px}
+  .form-hint{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+  /* footer */
+  footer{position:relative;z-index:1;color:var(--muted);font-size:13px;text-align:center;padding:0 20px 36px}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(2,6,23,.55);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}
+  .modal{background:#fff;border-radius:20px;max-width:600px;width:100%;max-height:86vh;overflow:auto;box-shadow:0 30px 80px rgba(2,6,23,.35);padding:26px}
+  .modal h3{font-size:19px;margin-bottom:14px}
+  .modal ol{margin:8px 0 14px 20px;display:flex;flex-direction:column;gap:10px;color:#1f2937;font-size:14.5px;line-height:1.55}
+  .modal .hint{background:#eff6ff;border-left:4px solid var(--blue);border-radius:10px;padding:12px 14px;font-size:13.5px;color:#334155;margin-bottom:14px}
+  .modal-actions{display:flex;justify-content:flex-end}
+  .lightbox{position:fixed;inset:0;background:rgba(2,6,23,.85);z-index:60;display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out}
+  .lightbox img{max-width:100%;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+
+  @media (max-width:560px){
+    .brand h1{font-size:20px}
+    .wrap{padding:0 14px}
+    .person-grid{grid-template-columns:1fr}
+    .phase-grid{grid-template-columns:1fr}
+    .grow .g-name{width:64px}
+  }
+</style>
+</head>
+<body>
+
+<div class="bubbles" aria-hidden="true">
+  <div class="bubble b1"></div><div class="bubble b2"></div><div class="bubble b3"></div><div class="bubble b4"></div><div class="bubble b5"></div>
+</div>
+
+<header class="app-header">
+  <div class="header-in wrap">
+    <div class="brand-logo">AW</div>
+    <div class="brand">
+      <h1>Autowasstraat</h1>
+      <p>Sectorproject — gezamenlijk project, eigen werklogboek per groepslid</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 1. persoonskeuze -->
+  <section id="selView" class="wrap">
+    <h2 class="section-title">Wie ben jij?</h2>
+    <p class="section-sub">Kies jouw naam om je eigen werk per fase bij te houden. Zo heeft iedereen zijn eigen voortgang.</p>
+    <div class="person-grid" id="selGrid"></div>
+  </section>
+
+  <!-- 2. dashboard -->
+  <section id="dashView" class="wrap" hidden>
+    <button class="back-link" data-action="switch">&#8592; Wissel van persoon</button>
+    <div class="dash-head">
+      <div class="avatar avatar-lg" id="dashAvatar"></div>
+      <div>
+        <h2 id="dashNaam"></h2>
+        <span class="chip c-ok" id="dashChip" hidden>Gepubliceerd</span>
+      </div>
+    </div>
+    <p class="meta-row" id="dashMeta"></p>
+
+    <div class="actions-row">
+      <button class="btn btn-primary" data-action="publish">Publiceren</button>
+      <button class="btn btn-soft" data-action="import">Importeer bestand</button>
+      <button class="btn btn-ghost" data-action="reset-local">Verwijder lokale wijzigingen</button>
+      <button class="btn btn-ghost" data-action="help">Hoe werkt dit?</button>
+    </div>
+
+    <div class="progress-block">
+      <div class="progress-top">
+        <strong id="progLabel"></strong>
+        <span id="progPct"></span>
+      </div>
+      <div class="bar"><div class="fill" id="progFill"></div></div>
+    </div>
+
+    <div class="group-card">
+      <h4>Voortgang van de groep</h4>
+      <div id="groupRows"></div>
+    </div>
+
+    <h2 class="section-title">De 8 fases</h2>
+    <p class="section-sub">Open een fase en zet daarin wat je hebt gedaan, met foto('s).</p>
+    <div class="phase-grid" id="phaseGrid"></div>
+  </section>
+
+  <!-- 3. fase detail -->
+  <section id="phaseView" class="wrap" hidden>
+    <button class="back-link" data-action="back-dash">&#8592; Terug naar overzicht</button>
+    <div class="phase-head">
+      <span class="phase-num" id="pvNum"></span>
+      <h2 id="pvNaam"></h2>
+    </div>
+    <p class="phase-desc" id="pvDesc"></p>
+    <div class="status-tabs" id="statusTabs"></div>
+    <div class="entries" id="entriesBox"></div>
+    <form class="add-card" id="entryForm">
+      <h4 id="formTitle">Nieuwe inzending</h4>
+      <div class="field">
+        <label for="inpDatum">Datum</label>
+        <input type="date" id="inpDatum">
+      </div>
+      <div class="field">
+        <label for="inpTekst">Wat heb je gedaan?</label>
+        <textarea id="inpTekst" rows="3" placeholder="Beschrijf hier jouw werk binnen deze fase..." required></textarea>
+      </div>
+      <div class="field">
+        <label class="file-btn">Foto('s) toevoegen (optioneel)
+          <input type="file" id="inpFoto" accept="image/*" multiple hidden>
+        </label>
+        <div class="pending-thumbs" id="pendingBox"></div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg" id="formSubmit">Inzending opslaan</button>
+        <button type="button" class="btn btn-ghost" data-action="cancel-edit" hidden id="btnCancelEdit">Annuleren</button>
+      </div>
+      <p class="form-hint" id="savingHint"></p>
+    </form>
+  </section>
+</main>
+
+<footer>Sectorproject Autowasstraat — Thijn · Tijmen · Marten</footer>
+
+<!-- help modal -->
+<div class="overlay" id="helpModal" hidden>
+  <div class="modal">
+    <h3>Hoe werkt deze site?</h3>
+    <div class="hint">
+      De site is gehost op GitHub Pages. Alles wat je invult, sla je op als een
+      <strong>JSON-bestand per persoon</strong> in de repo. Zo ziet iedereen elkaars voortgang.
+    </div>
+    <ol>
+      <li><strong>Kies je naam</strong> en open een fase.</li>
+      <li><strong>Schrijf wat je hebt gedaan</strong> en voeg eventueel foto's toe. Kan een andere laptop zijn: je werk wordt hier automatisch lokaal bewaard.</li>
+      <li>Klaar? Klik <strong>"Publiceren"</strong>. Er wordt een bestand gedownload, bijvoorbeeld <code>thijn.json</code>.</li>
+      <li>Ga naar de GitHub-repo en vervang daarmee <code>data/thijn.json</code> (of tijmen/marten).</li>
+      <li>Iedereen die de site opent, ziet nu jouw gepubliceerde voortgang.</li>
+    </ol>
+    <div class="hint">
+      Ben je op een andere computer? Klik <strong>"Importeer bestand"</strong> en kies jouw
+      gecommitte JSON om verder te werken.
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" data-action="close-help">Begrepen</button>
+    </div>
+  </div>
+</div>
+
+<!-- lightbox -->
+<div class="lightbox" id="lightbox" hidden>
+  <img id="lightboxImg" alt="Foto vergroot">
+</div>
+
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+
+<script>
+(function () {
+  'use strict';
+
+  var PERSONEN = [
+    { naam: 'Thijn', kleur: '#2563eb' },
+    { naam: 'Tijmen', kleur: '#0d9488' },
+    { naam: 'Marten', kleur: '#9333ea' }
+  ];
+
+  var FASE_META = [
+    { id: 1, naam: 'Oriëntatie &amp; Onderzoek', beschr: 'Onderzoek naar autowasstraten, eisen en verwachtingen. Wat moet het worden en voor wie?' },
+    { id: 2, naam: 'Plan van Aanpak', beschr: 'Het projectplan: doel, aanpak, planning, taken en rollen van het groepje.' },
+    { id: 3, naam: 'Ontwerp', beschr: 'Schetsen en tekeningen: hoe komt de autowasstraat eruit te zien?' },
+    { id: 4, naam: 'Prototype', beschr: 'Een eerste werkend prototype of model van de autowasstraat.' },
+    { id: 5, naam: 'Realisatie &amp; Bouw', beschr: 'Daadwerkelijk bouwen: materialen, techniek en samenstellen.' },
+    { id: 6, naam: 'Testen &amp; Verbeteren', beschr: 'Testen van het prototype en verbeterpunten verwerken.' },
+    { id: 7, naam: 'Presentatie', beschr: 'Het project presenteren aan klasgenoten en begeleiders.' },
+    { id: 8, naam: 'Evaluatie &amp; Oplevering', beschr: 'Evaluatie van het proces en het eindresultaat. Wat ging goed en wat kan beter?' }
+  ];
+
+  var STATUS_LABEL = { 'niet-begonnen': 'Niet begonnen', bezig: 'Bezig', klaar: 'Klaar' };
+  var STATUS_COLOR = { 'niet-begonnen': '#94a3b8', bezig: '#f59e0b', klaar: '#10b981' };
+  var CHIP_CLASS = { 'niet-begonnen': 'c-gray', bezig: 'c-amber', klaar: 'c-green' };
+  var LS_KEY = 'autowasstraat_local_v1';
+
+  /* ---------- helpers ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function kleurVoor(naam) {
+    for (var i = 0; i < PERSONEN.length; i++) if (PERSONEN[i].naam === naam) return PERSONEN[i].kleur;
+    return '#2563eb';
+  }
+  function filenaam(naam) { return naam.toLowerCase(); }
+  function todayStr() {
+    var d = new Date();
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + mm + '-' + dd;
+  }
+  function fmtD(s) {
+    if (!s) return 'Geen datum';
+    var parts = String(s).split('-');
+    if (parts.length === 3) return parts[2] + '-' + parts[1] + '-' + parts[0];
+    return s;
+  }
+  function countText(n) { return n === 1 ? '1 inzending' : n + ' inzendingen'; }
+  function countFoto(n) { return n === 1 ? '1 foto' : n + " foto's"; }
+
+  function emptyPersoon(naam) {
+    return {
+      naam: naam,
+      kleur: kleurVoor(naam),
+      fases: FASE_META.map(function (f) {
+        return { id: f.id, naam: f.naam.replace(/&amp;/g, '&'), status: 'niet-begonnen', entries: [] };
+      })
+    };
+  }
+
+  function normalize(j) {
+    var map = {};
+    (j.fases || []).forEach(function (f) { map[f.id] = f; });
+    return {
+      naam: j.naam,
+      kleur: j.kleur || kleurVoor(j.naam),
+      fases: FASE_META.map(function (f) {
+        var e = map[f.id] || {};
+        var status = ['niet-begonnen', 'bezig', 'klaar'].indexOf(e.status) !== -1 ? e.status : 'niet-begonnen';
+        var entries = Array.isArray(e.entries) ? e.entries.map(function (en) {
+          return {
+            datum: en.datum || '',
+            tekst: en.tekst || '',
+            fotos: Array.isArray(en.fotos) ? en.fotos.filter(function (x) { return typeof x === 'string'; }) : []
+          };
+        }) : [];
+        return { id: f.id, naam: f.naam.replace(/&amp;/g, '&'), status: status, entries: entries };
+      })
+    };
+  }
+
+  /* ---------- state ---------- */
+  var repoData = {};
+  var localData = {};
+  var currentNaam = null;
+  var phaseId = null;
+
+  var formDatum = todayStr();
+  var formTekst = '';
+  var pendingPhotos = [];
+  var editingIdx = null;
+
+  function persoonVoor(naam) {
+    if (localData[naam]) return localData[naam];
+    return repoData[naam] || emptyPersoon(naam);
+  }
+  function hasLocal(naam) { return !!localData[naam]; }
+
+  function loadLocal() {
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      localData = raw ? JSON.parse(raw) : {};
+    } catch (e) { localData = {}; }
+  }
+  function saveLocal() {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify(localData));
+    } catch (e) {
+      alert('Opslaan in deze browser lukt niet (de opslag zit waarschijnlijk vol). Verwijder een paar foto\'s en probeer opnieuw.');
+    }
+  }
+  function persist() {
+    localData[currentNaam] = clonePersoon(persoonVoor(currentNaam));
+    saveLocal();
+  }
+  function clonePersoon(p) {
+    return JSON.parse(JSON.stringify(p));
+  }
+
+  function faseVan(p, id) {
+    for (var i = 0; i < p.fases.length; i++) if (p.fases[i].id === id) return p.fases[i];
+    return null;
+  }
+  function countKlaar(p) {
+    var n = 0;
+    p.fases.forEach(function (f) { if (f.status === 'klaar') n++; });
+    return n;
+  }
+
+  /* ---------- laden ---------- */
+  function loadAll() {
+    PERSONEN.forEach(function (p) { repoData[p.naam] = emptyPersoon(p.naam); });
+    return Promise.all(PERSONEN.map(function (p) {
+      return fetch('data/' + filenaam(p.naam) + '.json', { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('niet gevonden'); return r.json(); })
+        .then(function (j) { repoData[p.naam] = normalize(j); })
+        .catch(function () { /* gebruik de lege startdata */ });
+    }));
+  }
+
+  /* ---------- render ---------- */
+  function showView(id) {
+    document.getElementById('selView').hidden = id !== 'sel';
+    document.getElementById('dashView').hidden = id !== 'dash';
+    document.getElementById('phaseView').hidden = id !== 'phase';
+  }
+
+  function initials(naam) { return naam.charAt(0).toUpperCase(); }
+
+  function renderSelect() {
+    phaseId = null;
+    currentNaam = null;
+    showView('sel');
+    document.getElementById('selGrid').innerHTML = PERSONEN.map(function (p) {
+      var data = persoonVoor(p.naam);
+      var klaar = countKlaar(data);
+      return '<div class="person-card" data-action="sel-person" data-naam="' + esc(p.naam) +
+        '" style="--c:' + esc(p.kleur) + '">' +
+        '<div class="avatar" style="background:' + esc(p.kleur) + '">' + initials(p.naam) + '</div>' +
+        '<h3>' + esc(p.naam) + '</h3>' +
+        '<p class="p-hint">' + klaar + ' van de 8 fases klaar</p>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderDashboard() {
+    showView('dash');
+    var p = persoonVoor(currentNaam);
+    phaseId = null;
+
+    document.getElementById('dashAvatar').style.background = p.kleur;
+    document.getElementById('dashAvatar').textContent = initials(p.naam);
+    document.getElementById('dashNaam').textContent = p.naam;
+
+    var chip = document.getElementById('dashChip');
+    if (hasLocal(currentNaam)) {
+      chip.className = 'chip c-warn';
+      chip.textContent = 'Lokaal bewerkt — nog publiceren';
+      chip.hidden = false;
+    } else {
+      chip.className = 'chip c-ok';
+      chip.textContent = 'Gepubliceerd';
+      chip.hidden = typeof repoData[currentNaam] === 'undefined';
+    }
+
+    var nEntries = 0, nFoto = 0;
+    p.fases.forEach(function (f) { nEntries += f.entries.length; f.entries.forEach(function (e) { nFoto += e.fotos.length; }); });
+    document.getElementById('dashMeta').innerHTML = 'Je hebt <strong>' + nEntries + '</strong> ' +
+      (nEntries === 1 ? 'inzending' : 'inzendingen') + ' met in totaal <strong>' + nFoto + '</strong> ' +
+      (nFoto === 1 ? 'foto' : 'foto\'s') + ' geplaatst.';
+
+    var klaar = countKlaar(p);
+    var pct = Math.round((klaar / 8) * 100);
+    document.getElementById('progLabel').textContent = 'Jouw voortgang';
+    document.getElementById('progPct').textContent = klaar + ' / 8 fases klaar (' + pct + '%)';
+    document.getElementById('progFill').style.width = pct + '%';
+
+    document.getElementById('groupRows').innerHTML = PERSONEN.map(function (pp) {
+      var d = persoonVoor(pp.naam);
+      var k = countKlaar(d);
+      var pc = Math.round((k / 8) * 100);
+      return '<div class="grow">' +
+        '<div class="avatar" style="background:' + esc(pp.kleur) + '">' + initials(pp.naam) + '</div>' +
+        '<span class="g-name">' + esc(pp.naam) + '</span>' +
+        '<div class="bar"><div class="fill" style="width:' + pc + '%;background:linear-gradient(90deg,' + esc(pp.kleur) + ',' + esc(pp.kleur) + 'cc)"></div></div>' +
+        '<span class="g-pct">' + k + '/8</span>' +
+        '</div>';
+    }).join('');
+
+    document.getElementById('phaseGrid').innerHTML = p.fases.map(function (f) {
+      var nE = f.entries.length;
+      var nF = 0;
+      f.entries.forEach(function (e) { nF += e.fotos.length; });
+      var thumbs = [];
+      for (var i = 0; i < f.entries.length && thumbs.length < 3; i++) {
+        f.entries[i].fotos.forEach(function (src) {
+          if (thumbs.length < 3) thumbs.push(src);
+        });
+      }
+      return '<div class="phase-card" style="--c:' + esc(STATUS_COLOR[f.status]) + '">' +
+        '<div class="phase-top">' +
+        '<span class="phase-num">' + f.id + '</span>' +
+        '<span class="chip ' + CHIP_CLASS[f.status] + '">' + esc(STATUS_LABEL[f.status]) + '</span>' +
+        '</div>' +
+        '<h3>' + esc(f.naam) + '</h3>' +
+        '<p>' + esc(beschrVan(f.id)) + '</p>' +
+        '<span class="phase-stats">' + countText(nE) + ' &middot; ' + countFoto(nF) + '</span>' +
+        (thumbs.length ? '<div class="phase-thumbs">' + thumbs.map(function (s) {
+          return '<img src="' + s + '" alt="Foto bij ' + esc(f.naam) + '">';
+        }).join('') + '</div>' : '') +
+        '<button class="btn btn-soft" data-action="open-phase" data-id="' + f.id + '">Bekijk &amp; vullen</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function beschrVan(id) {
+    for (var i = 0; i < FASE_META.length; i++) if (FASE_META[i].id === id) return FASE_META[i].beschr;
+    return '';
+  }
+
+  function renderPhase() {
+    showView('phase');
+    var p = persoonVoor(currentNaam);
+    var f = faseVan(p, phaseId);
+
+    document.getElementById('pvNum').textContent = f.id;
+    document.getElementById('pvNaam').textContent = f.naam;
+    document.getElementById('pvDesc').textContent = beschrVan(f.id);
+
+    document.getElementById('statusTabs').innerHTML = ['niet-begonnen', 'bezig', 'klaar'].map(function (s) {
+      return '<button data-action="status" data-val="' + s + '" class="' + (f.status === s ? 'on' : '') + '">' +
+        STATUS_LABEL[s] + '</button>';
+    }).join('');
+
+    var box = document.getElementById('entriesBox');
+    if (!f.entries.length) {
+      box.innerHTML = '<div class="empty-note">Nog geen werk geplaatst in deze fase. Voeg hieronder je eerste inzending toe.</div>';
+    } else {
+      box.innerHTML = f.entries.map(function (e, i) {
+        var fotos = e.fotos.length ? '<div class="photo-grid">' + e.fotos.map(function (src) {
+          return '<figure class="photo"><img src="' + src + '" alt="Foto bij inzending" data-action="show-photo" data-src="' + src + '"><figcaption>Foto</figcaption></figure>';
+        }).join('') + '</div>' : '';
+        return '<div class="entry">' +
+          '<div class="entry-meta">' +
+          '<span class="entry-date">' + esc(fmtD(e.datum)) + '</span>' +
+          '<span class="entry-actions">' +
+          '<button class="btn btn-ghost btn-sm" data-action="edit-entry" data-idx="' + i + '">Bewerken</button>' +
+          '<button class="btn btn-danger btn-sm" data-action="del-entry" data-idx="' + i + '">Verwijderen</button>' +
+          '</span></div>' +
+          '<p class="entry-text">' + esc(e.tekst) + '</p>' +
+          fotos +
+          '</div>';
+      }).join('');
+    }
+
+    var form = document.getElementById('entryForm');
+    document.getElementById('formTitle').textContent = editingIdx === null ? 'Nieuwe inzending' : 'Inzending bewerken';
+    document.getElementById('formSubmit').textContent = editingIdx === null ? 'Inzending opslaan' : 'Wijzigingen opslaan';
+    document.getElementById('btnCancelEdit').hidden = editingIdx === null;
+    document.getElementById('inpDatum').value = formDatum;
+    document.getElementById('inpTekst').value = formTekst;
+    renderPending();
+  }
+
+  function renderPending() {
+    document.getElementById('pendingBox').innerHTML = pendingPhotos.map(function (src, i) {
+      return '<div class="pending"><img src="' + src + '" alt="Voorbeeld foto"><button type="button" data-action="del-pending" data-idx="' + i + '" title="Verwijder foto">&times;</button></div>';
+    }).join('');
+  }
+
+  /* ---------- foto's ---------- */
+  function resizeImage(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          var maxW = 900;
+          var scale = Math.min(1, maxW / img.width);
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.78));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---------- acties ---------- */
+  function doAction(action, dataset) {
+    if (action === 'sel-person') {
+      currentNaam = dataset.naam;
+      renderDashboard();
+    } else if (action === 'switch') {
+      renderSelect();
+    } else if (action === 'open-phase') {
+      phaseId = parseInt(dataset.id, 10);
+      resetForm();
+      renderPhase();
+    } else if (action === 'back-dash') {
+      renderDashboard();
+    } else if (action === 'status') {
+      var f = faseVan(persoonVoor(currentNaam), phaseId);
+      f.status = dataset.val;
+      persist();
+      renderPhase();
+    } else if (action === 'edit-entry') {
+      var f2 = faseVan(persoonVoor(currentNaam), phaseId);
+      var e = f2.entries[parseInt(dataset.idx, 10)];
+      editingIdx = parseInt(dataset.idx, 10);
+      formDatum = e.datum || todayStr();
+      formTekst = e.tekst;
+      pendingPhotos = e.fotos.slice();
+      renderPhase();
+      document.getElementById('entryForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (action === 'del-entry') {
+      var f3 = faseVan(persoonVoor(currentNaam), phaseId);
+      if (confirm('Deze inzending verwijderen?')) {
+        f3.entries.splice(parseInt(dataset.idx, 10), 1);
+        persist();
+        renderPhase();
+      }
+    } else if (action === 'del-pending') {
+      pendingPhotos.splice(parseInt(dataset.idx, 10), 1);
+      renderPending();
+    } else if (action === 'publish') {
+      var data = JSON.stringify(persoonVoor(currentNaam), null, 2);
+      var blob = new Blob([data], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filenaam(currentNaam) + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    } else if (action === 'import') {
+      document.getElementById('importFile').click();
+    } else if (action === 'reset-local') {
+      if (confirm('Alle lokale wijzigingen van ' + currentNaam + ' verwijderen? Daarna wordt de gepubliceerde versie uit de repo geladen.')) {
+        delete localData[currentNaam];
+        saveLocal();
+        renderDashboard();
+      }
+    } else if (action === 'cancel-edit') {
+      resetForm();
+      renderPhase();
+    } else if (action === 'help') {
+      document.getElementById('helpModal').hidden = false;
+    } else if (action === 'close-help') {
+      document.getElementById('helpModal').hidden = true;
+    } else if (action === 'show-photo') {
+      document.getElementById('lightboxImg').src = dataset.src;
+      document.getElementById('lightbox').hidden = false;
+    }
+  }
+
+  function resetForm() {
+    editingIdx = null;
+    formDatum = todayStr();
+    formTekst = '';
+    pendingPhotos = [];
+  }
+
+  function submitEntry(e) {
+    e.preventDefault();
+    var tekst = document.getElementById('inpTekst').value.trim();
+    if (!tekst) { alert('Vul eerst in wat je hebt gedaan.'); return; }
+    var p = persoonVoor(currentNaam);
+    var f = faseVan(p, phaseId);
+    var entry = { datum: formDatum, tekst: tekst, fotos: pendingPhotos.slice() };
+    if (editingIdx !== null) {
+      f.entries[editingIdx] = entry;
+    } else {
+      f.entries.unshift(entry);
+    }
+    persist();
+    resetForm();
+    renderPhase();
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('click', function (ev) {
+    var t = ev.target.closest('[data-action]');
+    if (!t) return;
+    doAction(t.getAttribute('data-action'), t.dataset);
+  });
+
+  document.getElementById('entryForm').addEventListener('submit', submitEntry);
+
+  document.getElementById('inpDatum').addEventListener('input', function () { formDatum = this.value; });
+  document.getElementById('inpTekst').addEventListener('input', function () { formTekst = this.value; });
+
+  document.getElementById('inpFoto').addEventListener('change', function () {
+    var files = Array.prototype.slice.call(this.files);
+    this.value = '';
+    var hint = document.getElementById('savingHint');
+    if (!files.length) return;
+    hint.textContent = 'Foto\'s worden verkleind en klaargezet...';
+    var proms = files.map(function (file) { return resizeImage(file).catch(function () { return null; }); });
+    Promise.all(proms).then(function (results) {
+      results.forEach(function (src) { if (src) pendingPhotos.push(src); });
+      hint.textContent = '';
+      renderPending();
+    });
+  });
+
+  document.getElementById('importFile').addEventListener('change', function () {
+    var file = this.files[0];
+    this.value = '';
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      try {
+        var j = JSON.parse(ev.target.result);
+        var match = null;
+        PERSONEN.forEach(function (p) { if (p.naam === (j.naam || '')) match = p.naam; });
+        if (!match) { alert('Dit bestand hoort niet bij een geldige persoon (naam niet gevonden).'); return; }
+        localData[match] = normalize(j);
+        saveLocal();
+        currentNaam = match;
+        resetForm();
+        renderDashboard();
+        alert('Werk van ' + match + ' geïmporteerd en lokaal opgeslagen. Vergeet niet te publiceren zodra je klaar bent.');
+      } catch (err) {
+        alert('Kan dit bestand niet lezen. Is het wel een geldig JSON-bestand van deze site?');
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById('lightbox').addEventListener('click', function () {
+    this.hidden = true;
+    document.getElementById('lightboxImg').src = '';
+  });
+
+  /* ---------- init ---------- */
+  loadLocal();
+  loadAll().then(function () {
+    renderSelect();
+  });
+})();
+</script>
+</body>
+</html>
