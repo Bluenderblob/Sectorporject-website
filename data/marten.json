@@ -2,13 +2,127 @@
   "naam": "Marten",
   "kleur": "#9333ea",
   "fases": [
-    { "id": 1, "naam": "Oriëntatie & Onderzoek", "status": "niet-begonnen", "entries": [] },
-    { "id": 2, "naam": "Plan van Aanpak", "status": "niet-begonnen", "entries": [] },
-    { "id": 3, "naam": "Ontwerp", "status": "niet-begonnen", "entries": [] },
-    { "id": 4, "naam": "Prototype", "status": "niet-begonnen", "entries": [] },
-    { "id": 5, "naam": "Realisatie & Bouw", "status": "niet-begonnen", "entries": [] },
-    { "id": 6, "naam": "Testen & Verbeteren", "status": "niet-begonnen", "entries": [] },
-    { "id": 7, "naam": "Presentatie", "status": "niet-begonnen", "entries": [] },
-    { "id": 8, "naam": "Evaluatie & Oplevering", "status": "niet-begonnen", "entries": [] }
+    {
+      "id": 1,
+      "naam": "Oriëntatie & Onderzoek",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "Projectvoorstel opgesteld en ingediend. Hieronder de kern van het voorstel.\n\nPROBLEEMSTELLING\nEen autowasbedrijf wil uitbreiden naar kleinere steden en dorpen. Daarvoor moeten wij een klein werkend schaalmodel maken dat aan alle eisen voldoet.\n\nPROJECTRESULTAAT\nEen werkend schaalmodel van een wat kleinere autowasstraat.\n\nPROJECTEISEN\n1. Het schaalmodel moet volledig functioneel zijn.\n2. Het model moet water, lucht en borstels gebruiken.\n3. Het wasproces moet automatisch verlopen.\n4. Het model moet veilig zijn.\n5. De onderdelen moeten goed samenwerken.\n6. Het model moet geschikt zijn voor kleinere locaties.\n7. Het model moet stevig en netjes gebouwd zijn.\n8. Het model moet gebruiksvriendelijk zijn.\n9. Het model moet betaalbaar zijn.\n10. Het model moet aan de afgesproken afmetingen voldoen.\n\nFASE \"START PROJECT\"\nActiviteit: opdracht bekijken en het probleem en de eisen vaststellen.\nResultaat: duidelijk beeld van de opdracht, wensen en eisen.",
+          "fotos": [],
+          "pdfs": []
+        },
+        {
+          "datum": "2026-09-29",
+          "tekst": "ORIËNTATIEFASE\nActiviteit: informatie zoeken over wasstraten en technieken.\nResultaat: informatie over verschillende mogelijke technieken.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "naam": "Plan van Aanpak",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "DEFINITIEFASE\nActiviteit: eisen, randvoorwaarden en het programma van eisen opstellen.\nResultaat: informatie en ideeën die gebruikt kunnen worden voor het ontwerp.\n\nRANDVOORWAARDEN\n\nMaterialen\nStaal, kunstof, slangen voor pneumatiek, elektrische onderdelen, bouten en moeren, waterpomp.\n\nGereedschap\nLasapparaat, lintzaag, schuifmaat, striptang, zijsnijtang, platenknipper.\n\nBenodigde kennis\nIemand die verstand heeft van werktuigbouwkunde, elektro en machinebouw.",
+          "fotos": [],
+          "pdfs": []
+        },
+        {
+          "datum": "2026-09-29",
+          "tekst": "Afspraken over de samenwerking:\n- Iedereen heeft zijn eigen verantwoordelijkheden.\n- We houden ons aan de planning die door school is gegeven.",
+          "fotos": [],
+          "pdfs": []
+        },
+        {
+          "datum": "2026-09-29",
+          "tekst": "FASERING VAN HET PROJECT\nPer fase zijn de activiteiten en het verwachte resultaat als volgt vastgelegd.\n\nSTART PROJECT\nActiviteit: opdracht bekijken en het probleem en de eisen vaststellen.\nResultaat: duidelijk beeld van de opdracht, wensen en eisen.\n\nORIËNTATIEFASE\nActiviteit: informatie zoeken over wasstraten en technieken.\nResultaat: informatie over verschillende mogelijke technieken.\n\nDEFINITIEFASE\nActiviteit: eisen, randvoorwaarden en het programma van eisen opstellen.\nResultaat: informatie en ideeën die gebruikt kunnen worden voor het ontwerp.\n\nONTWERPFASE\nActiviteit: verschillende ontwerpen maken en een ontwerp kiezen.\nResultaat: een uitwerkt ontwerp van de schaalmodel-autowasstraat.\n\nVOORBEREIDINGSFASE\nActiviteit: materialen, gereedschap en onderdelen regelen en de bouw voorbereiden.\nResultaat: materialen, gereedschap en werkzaamheden zijn geregeld en gepland.\n\nREALISATIEFASE\nActiviteit: het schaalmodel bouwen, aansluiten en testen.\nResultaat: het schaalmodel is gebouwd.\n\nOPLEVERINGSFASE\nActiviteit: het eindresultaat presenteren, testen en opleveren.\nResultaat: gecontroleerd of de autowasstraat goed en veilig werkt.\n\nNAZORGFASE\nActiviteit: problemen oplossen en eventueel verbeteringen uitvoeren.\nResultaat: duidelijk wat goed ging, wat beter kan en of aan de eisen is voldaan.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "naam": "Ontwerp",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "GEPLAND: ONTWERPFASE\nDeze fase staat gepland in het projectvoorstel. Er is hiervoor nog geen werk uitgevoerd.\n\nActiviteit: verschillende ontwerpen maken en een ontwerp kiezen.\nResultaat: een uitwerkt ontwerp van de schaalmodel-autowasstraat.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "naam": "Prototype",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "GEPLAND: VOORBEREIDINGSFASE\nDeze fase staat gepland in het projectvoorstel. Er is hiervoor nog geen werk uitgevoerd.\n\nActiviteit: materialen, gereedschap en onderdelen regelen en de bouw voorbereiden.\nResultaat: materialen, gereedschap en werkzaamheden zijn geregeld en gepland.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "naam": "Realisatie & Bouw",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "GEPLAND: REALISATIEFASE\nDeze fase staat gepland in het projectvoorstel. Er is hiervoor nog geen werk uitgevoerd.\n\nActiviteit: het schaalmodel bouwen, aansluiten en testen.\nResultaat: het schaalmodel is gebouwd.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "naam": "Testen & Verbeteren",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "In het projectvoorstel zit het testen niet in een aparte fase, maar in de realisatiefase en de opleveringsfase:\n- Realisatiefase: het schaalmodel bouwen, aansluiten en testen.\n- Opleveringsfase: het eindresultaat presenteren, testen en opleveren. Resultaat: gecontroleerd of de autowasstraat goed en veilig werkt.\n\nNog niet gestart. Testresultaten en eventuele verbeterpunten worden hier vastgelegd.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "naam": "Presentatie",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "GEPLAND: OPLEVERINGSFASE\nDeze fase staat gepland in het projectvoorstel. Er is hiervoor nog geen werk uitgevoerd.\n\nActiviteit: het eindresultaat presenteren, testen en opleveren.\nResultaat: gecontroleerd of de autowasstraat goed en veilig werkt.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "naam": "Evaluatie & Oplevering",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "GEPLAND: NAZORGFASE\nDeze fase staat gepland in het projectvoorstel. Er is hiervoor nog geen werk uitgevoerd.\n\nActiviteit: problemen oplossen en eventueel verbeteringen uitvoeren.\nResultaat: duidelijk wat goed ging, wat beter kan en of aan de eisen is voldaan.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    }
   ]
 }
