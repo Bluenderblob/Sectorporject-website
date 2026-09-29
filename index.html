@@ -146,6 +146,13 @@
   .photo{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#f1f5f9}
   .photo img{width:100%;height:130px;object-fit:cover;display:block;cursor:pointer}
   .photo figcaption{font-size:11.5px;color:var(--muted);padding:4px 8px;text-align:center}
+  .pdf-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .pdf-card{display:flex;align-items:center;gap:11px;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:9px 12px}
+  .pdf-ico{flex:0 0 auto;width:32px;height:36px;border-radius:6px;background:#dc2626;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.4px;display:flex;align-items:center;justify-content:center}
+  .pdf-info{min-width:0}
+  .pdf-naam{display:block;font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pdf-sub{display:block;font-size:11.5px;color:var(--muted)}
+  .pdf-acties{margin-left:auto;display:flex;gap:6px;flex-shrink:0}
   .empty-note{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:16px;padding:26px;text-align:center;color:var(--muted);font-size:14px}
 
   .add-card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px 22px}
@@ -159,11 +166,15 @@
   .field textarea{resize:vertical;min-height:90px}
   .file-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--blue-dark);background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:9px 14px}
   .file-btn:hover{background:#dbeafe}
+  .file-row{display:flex;gap:10px;flex-wrap:wrap}
+  .file-row .file-btn{display:inline-flex;margin-bottom:0}
   .pending-thumbs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
   .pending{position:relative;width:86px;height:86px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
   .pending img{width:100%;height:100%;object-fit:cover}
-  .pending button{position:absolute;top:4px;right:4px;width:22px;height:22px;border:none;border-radius:50%;background:rgba(15,23,42,.7);color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-  .pending button:hover{background:#b91c1c}
+  .pending-pdf{position:relative;display:flex;align-items:center;gap:9px;padding:9px 32px 9px 11px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;max-width:100%}
+  .pending-pdf .pdf-naam{max-width:200px}
+  .pending button,.pending-pdf button{position:absolute;top:4px;right:4px;width:22px;height:22px;border:none;border-radius:50%;background:rgba(15,23,42,.7);color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .pending button:hover,.pending-pdf button:hover{background:#b91c1c}
   .form-actions{display:flex;gap:10px;align-items:center;margin-top:16px}
   .form-hint{font-size:12.5px;color:var(--muted);margin-top:10px}
 
@@ -246,7 +257,7 @@
     </div>
 
     <h2 class="section-title">De 8 fases</h2>
-    <p class="section-sub">Open een fase en zet daarin wat je hebt gedaan, met foto('s).</p>
+    <p class="section-sub">Open een fase en zet daarin wat je hebt gedaan, met foto('s) en pdf('s).</p>
     <div class="phase-grid" id="phaseGrid"></div>
   </section>
 
@@ -271,10 +282,16 @@
         <textarea id="inpTekst" rows="3" placeholder="Beschrijf hier jouw werk binnen deze fase..." required></textarea>
       </div>
       <div class="field">
-        <label class="file-btn">Foto('s) toevoegen (optioneel)
-          <input type="file" id="inpFoto" accept="image/*" multiple hidden>
-        </label>
+        <div class="file-row">
+          <label class="file-btn">Foto('s) toevoegen (optioneel)
+            <input type="file" id="inpFoto" accept="image/*" multiple hidden>
+          </label>
+          <label class="file-btn">PDF('s) toevoegen (optioneel)
+            <input type="file" id="inpPdf" accept=".pdf,application/pdf" multiple hidden>
+          </label>
+        </div>
         <div class="pending-thumbs" id="pendingBox"></div>
+        <p class="form-hint">Foto's worden automatisch verkleind. Een PDF mag maximaal 2&nbsp;MB groot zijn.</p>
       </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary btn-lg" id="formSubmit">Inzending opslaan</button>
@@ -297,7 +314,7 @@
     </div>
     <ol>
       <li><strong>Kies je naam</strong> en open een fase.</li>
-      <li><strong>Schrijf wat je hebt gedaan</strong> en voeg eventueel foto's toe. Kan een andere laptop zijn: je werk wordt hier automatisch lokaal bewaard.</li>
+      <li><strong>Schrijf wat je hebt gedaan</strong> en voeg eventueel foto's en/of pdf's toe (een pdf mag maximaal 2&nbsp;MB zijn). Kan een andere laptop zijn: je werk wordt hier automatisch lokaal bewaard.</li>
       <li>Klaar? Klik <strong>"Publiceren"</strong>. Er wordt een bestand gedownload, bijvoorbeeld <code>thijn.json</code>.</li>
       <li>Ga naar de GitHub-repo en vervang daarmee <code>data/thijn.json</code> (of tijmen/marten).</li>
       <li>Iedereen die de site opent, ziet nu jouw gepubliceerde voortgang.</li>
@@ -370,6 +387,16 @@
   }
   function countText(n) { return n === 1 ? '1 inzending' : n + ' inzendingen'; }
   function countFoto(n) { return n === 1 ? '1 foto' : n + " foto's"; }
+  function countPdf(n) { return n === 1 ? '1 pdf' : n + " pdf's"; }
+
+  function safePdfNaam(naam) {
+    var n = String(naam || '').split(/[\\/]/).pop().trim();
+    if (!n) n = 'document.pdf';
+    if (!/\.pdf$/i.test(n)) n += '.pdf';
+    return n;
+  }
+  function isPdfData(s) { return typeof s === 'string' && s.indexOf('data:application/pdf') === 0; }
+  function pdfsVan(e) { return Array.isArray(e.pdfs) ? e.pdfs : []; }
 
   function emptyPersoon(naam) {
     return {
@@ -394,7 +421,12 @@
           return {
             datum: en.datum || '',
             tekst: en.tekst || '',
-            fotos: Array.isArray(en.fotos) ? en.fotos.filter(function (x) { return typeof x === 'string'; }) : []
+            fotos: Array.isArray(en.fotos) ? en.fotos.filter(function (x) {
+              return typeof x === 'string' && x.indexOf('data:image/') === 0;
+            }) : [],
+            pdfs: Array.isArray(en.pdfs) ? en.pdfs.filter(function (x) {
+              return x && typeof x === 'object' && isPdfData(x.data);
+            }).map(function (x) { return { naam: safePdfNaam(x.naam), data: x.data }; }) : []
           };
         }) : [];
         return { id: f.id, naam: f.naam.replace(/&amp;/g, '&'), status: status, entries: entries };
@@ -411,6 +443,7 @@
   var formDatum = todayStr();
   var formTekst = '';
   var pendingPhotos = [];
+  var pendingPdfs = [];
   var editingIdx = null;
 
   function persoonVoor(naam) {
@@ -423,13 +456,19 @@
     try {
       var raw = localStorage.getItem(LS_KEY);
       localData = raw ? JSON.parse(raw) : {};
+      if (!localData || typeof localData !== 'object') localData = {};
+      Object.keys(localData).forEach(function (k) {
+        var bekend = PERSONEN.some(function (pp) { return pp.naam === k; });
+        if (bekend && localData[k] && typeof localData[k] === 'object') localData[k] = normalize(localData[k]);
+        else delete localData[k];
+      });
     } catch (e) { localData = {}; }
   }
   function saveLocal() {
     try {
       localStorage.setItem(LS_KEY, JSON.stringify(localData));
     } catch (e) {
-      alert('Opslaan in deze browser lukt niet (de opslag zit waarschijnlijk vol). Verwijder een paar foto\'s en probeer opnieuw.');
+      alert('Opslaan in deze browser lukt niet (de opslag zit waarschijnlijk vol). Verwijder een paar foto\'s of pdf\'s en probeer opnieuw.');
     }
   }
   function persist() {
@@ -506,11 +545,14 @@
       chip.hidden = typeof repoData[currentNaam] === 'undefined';
     }
 
-    var nEntries = 0, nFoto = 0;
-    p.fases.forEach(function (f) { nEntries += f.entries.length; f.entries.forEach(function (e) { nFoto += e.fotos.length; }); });
+    var nEntries = 0, nFoto = 0, nPdf = 0;
+    p.fases.forEach(function (f) {
+      nEntries += f.entries.length;
+      f.entries.forEach(function (e) { nFoto += e.fotos.length; nPdf += pdfsVan(e).length; });
+    });
     document.getElementById('dashMeta').innerHTML = 'Je hebt <strong>' + nEntries + '</strong> ' +
       (nEntries === 1 ? 'inzending' : 'inzendingen') + ' met in totaal <strong>' + nFoto + '</strong> ' +
-      (nFoto === 1 ? 'foto' : 'foto\'s') + ' geplaatst.';
+      (nFoto === 1 ? 'foto' : 'foto\'s') + (nPdf ? ' en <strong>' + nPdf + '</strong> ' + countPdf(nPdf) : '') + ' geplaatst.';
 
     var klaar = countKlaar(p);
     var pct = Math.round((klaar / 8) * 100);
@@ -532,8 +574,8 @@
 
     document.getElementById('phaseGrid').innerHTML = p.fases.map(function (f) {
       var nE = f.entries.length;
-      var nF = 0;
-      f.entries.forEach(function (e) { nF += e.fotos.length; });
+      var nF = 0, nP = 0;
+      f.entries.forEach(function (e) { nF += e.fotos.length; nP += pdfsVan(e).length; });
       var thumbs = [];
       for (var i = 0; i < f.entries.length && thumbs.length < 3; i++) {
         f.entries[i].fotos.forEach(function (src) {
@@ -547,7 +589,7 @@
         '</div>' +
         '<h3>' + esc(f.naam) + '</h3>' +
         '<p>' + esc(beschrVan(f.id)) + '</p>' +
-        '<span class="phase-stats">' + countText(nE) + ' &middot; ' + countFoto(nF) + '</span>' +
+        '<span class="phase-stats">' + countText(nE) + ' &middot; ' + countFoto(nF) + (nP ? ' &middot; ' + countPdf(nP) : '') + '</span>' +
         (thumbs.length ? '<div class="phase-thumbs">' + thumbs.map(function (s) {
           return '<img src="' + s + '" alt="Foto bij ' + esc(f.naam) + '">';
         }).join('') + '</div>' : '') +
@@ -583,6 +625,17 @@
         var fotos = e.fotos.length ? '<div class="photo-grid">' + e.fotos.map(function (src) {
           return '<figure class="photo"><img src="' + src + '" alt="Foto bij inzending" data-action="show-photo" data-src="' + src + '"><figcaption>Foto</figcaption></figure>';
         }).join('') + '</div>' : '';
+        var entrPdfs = pdfsVan(e);
+        var pdfs = entrPdfs.length ? '<div class="pdf-list">' + entrPdfs.map(function (d, di) {
+          return '<div class="pdf-card">' +
+            '<span class="pdf-ico">PDF</span>' +
+            '<span class="pdf-info"><span class="pdf-naam" title="' + esc(d.naam) + '">' + esc(d.naam) + '</span>' +
+            '<span class="pdf-sub">' + pdfSize(d.data) + '</span></span>' +
+            '<span class="pdf-acties">' +
+            '<button class="btn btn-soft btn-sm" data-action="open-pdf" data-idx="' + i + '" data-pdf="' + di + '">Openen</button>' +
+            '<button class="btn btn-ghost btn-sm" data-action="dl-pdf" data-idx="' + i + '" data-pdf="' + di + '">Downloaden</button>' +
+            '</span></div>';
+        }).join('') + '</div>' : '';
         return '<div class="entry">' +
           '<div class="entry-meta">' +
           '<span class="entry-date">' + esc(fmtD(e.datum)) + '</span>' +
@@ -592,6 +645,7 @@
           '</span></div>' +
           '<p class="entry-text">' + esc(e.tekst) + '</p>' +
           fotos +
+          pdfs +
           '</div>';
       }).join('');
     }
@@ -606,9 +660,17 @@
   }
 
   function renderPending() {
-    document.getElementById('pendingBox').innerHTML = pendingPhotos.map(function (src, i) {
-      return '<div class="pending"><img src="' + src + '" alt="Voorbeeld foto"><button type="button" data-action="del-pending" data-idx="' + i + '" title="Verwijder foto">&times;</button></div>';
+    var html = pendingPhotos.map(function (src, i) {
+      return '<div class="pending"><img src="' + src + '" alt="Voorbeeld foto">' +
+        '<button type="button" data-action="del-pending" data-tipe="foto" data-idx="' + i + '" title="Verwijder foto">&times;</button></div>';
     }).join('');
+    html += pendingPdfs.map(function (d, i) {
+      return '<div class="pending-pdf">' +
+        '<span class="pdf-ico">PDF</span>' +
+        '<span class="pdf-naam" title="' + esc(d.naam) + '">' + esc(d.naam) + '</span>' +
+        '<button type="button" data-action="del-pending" data-tipe="pdf" data-idx="' + i + '" title="Verwijder pdf">&times;</button></div>';
+    }).join('');
+    document.getElementById('pendingBox').innerHTML = html;
   }
 
   /* ---------- foto's ---------- */
@@ -633,6 +695,57 @@
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
+  }
+
+  /* ---------- pdf's ---------- */
+  var PDF_MAX = 2 * 1024 * 1024;
+
+  function bufNaarBase64(buf) {
+    var bin = '';
+    var CHUNK = 0x8000;
+    for (var i = 0; i < buf.length; i += CHUNK) {
+      bin += String.fromCharCode.apply(null, buf.subarray(i, i + CHUNK));
+    }
+    return btoa(bin);
+  }
+
+  function leesPdf(file) {
+    return new Promise(function (resolve, reject) {
+      var lijktPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name || '');
+      if (!lijktPdf) { reject(new Error('Alleen PDF-bestanden zijn toegestaan.')); return; }
+      if (file.size > PDF_MAX) { reject(new Error('"' + file.name + '" is groter dan 2 MB.')); return; }
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        var buf = new Uint8Array(ev.target.result);
+        var isPdf = buf.length > 4 && buf[0] === 0x25 && buf[1] === 0x50 && buf[2] === 0x44 && buf[3] === 0x46;
+        if (!isPdf) { reject(new Error('"' + file.name + '" is geen geldig PDF-bestand.')); return; }
+        resolve({ naam: safePdfNaam(file.name), data: 'data:application/pdf;base64,' + bufNaarBase64(buf) });
+      };
+      reader.onerror = function () { reject(new Error('Kan "' + file.name + '" niet lezen.')); };
+      reader.readAsArrayBuffer(file);
+    });
+  }
+
+  function pdfSize(dataUrl) {
+    var i = String(dataUrl).indexOf('base64,');
+    if (i === -1) return 'Pdf';
+    var bytes = Math.floor((String(dataUrl).length - i - 7) * 0.75);
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function pdfBlob(d) {
+    var bin = atob(d.data.slice(d.data.indexOf('base64,') + 7));
+    var arr = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: 'application/pdf' });
+  }
+
+  function vindPdf(dataset) {
+    var f = faseVan(persoonVoor(currentNaam), phaseId);
+    var e = f && f.entries[parseInt(dataset.idx, 10)];
+    return e ? pdfsVan(e)[parseInt(dataset.pdf, 10)] : null;
   }
 
   /* ---------- acties ---------- */
@@ -660,6 +773,7 @@
       formDatum = e.datum || todayStr();
       formTekst = e.tekst;
       pendingPhotos = e.fotos.slice();
+      pendingPdfs = pdfsVan(e).slice();
       renderPhase();
       document.getElementById('entryForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (action === 'del-entry') {
@@ -670,8 +784,28 @@
         renderPhase();
       }
     } else if (action === 'del-pending') {
-      pendingPhotos.splice(parseInt(dataset.idx, 10), 1);
+      var lijst = dataset.tipe === 'pdf' ? pendingPdfs : pendingPhotos;
+      lijst.splice(parseInt(dataset.idx, 10), 1);
       renderPending();
+    } else if (action === 'open-pdf') {
+      var d1 = vindPdf(dataset);
+      if (d1) {
+        var url1 = URL.createObjectURL(pdfBlob(d1));
+        window.open(url1, '_blank');
+        setTimeout(function () { URL.revokeObjectURL(url1); }, 60000);
+      }
+    } else if (action === 'dl-pdf') {
+      var d2 = vindPdf(dataset);
+      if (d2) {
+        var url2 = URL.createObjectURL(pdfBlob(d2));
+        var a2 = document.createElement('a');
+        a2.href = url2;
+        a2.download = d2.naam;
+        document.body.appendChild(a2);
+        a2.click();
+        document.body.removeChild(a2);
+        setTimeout(function () { URL.revokeObjectURL(url2); }, 1000);
+      }
     } else if (action === 'publish') {
       var data = JSON.stringify(persoonVoor(currentNaam), null, 2);
       var blob = new Blob([data], { type: 'application/json' });
@@ -708,6 +842,7 @@
     formDatum = todayStr();
     formTekst = '';
     pendingPhotos = [];
+    pendingPdfs = [];
   }
 
   function submitEntry(e) {
@@ -716,7 +851,7 @@
     if (!tekst) { alert('Vul eerst in wat je hebt gedaan.'); return; }
     var p = persoonVoor(currentNaam);
     var f = faseVan(p, phaseId);
-    var entry = { datum: formDatum, tekst: tekst, fotos: pendingPhotos.slice() };
+    var entry = { datum: formDatum, tekst: tekst, fotos: pendingPhotos.slice(), pdfs: pendingPdfs.slice() };
     if (editingIdx !== null) {
       f.entries[editingIdx] = entry;
     } else {
@@ -745,10 +880,26 @@
     var hint = document.getElementById('savingHint');
     if (!files.length) return;
     hint.textContent = 'Foto\'s worden verkleind en klaargezet...';
-    var proms = files.map(function (file) { return resizeImage(file).catch(function () { return null; }); });
-    Promise.all(proms).then(function (results) {
-      results.forEach(function (src) { if (src) pendingPhotos.push(src); });
-      hint.textContent = '';
+    var proms = files.map(function (file) { return resizeImage(file); });
+    Promise.all(proms.map(function (p) { return p.catch(function () { return null; }); })).then(function (results) {
+      var fout = 0;
+      results.forEach(function (src) { if (src) pendingPhotos.push(src); else fout++; });
+      hint.textContent = fout ? fout + ' van de ' + files.length + ' foto\'s kon niet worden verwerkt en is overgeslagen.' : '';
+      renderPending();
+    });
+  });
+
+  document.getElementById('inpPdf').addEventListener('change', function () {
+    var files = Array.prototype.slice.call(this.files);
+    this.value = '';
+    var hint = document.getElementById('savingHint');
+    if (!files.length) return;
+    hint.textContent = 'Pdf\'s worden gecontroleerd en klaargezet...';
+    Promise.all(files.map(function (file) {
+      return leesPdf(file).then(function (d) { pendingPdfs.push(d); return null; }, function (err) { return err; });
+    })).then(function (fouten) {
+      var fout = fouten.filter(Boolean);
+      hint.textContent = fout.length ? fout[0].message + (fout.length > 1 ? ' (' + fout.length + ' bestanden overgeslagen)' : '') : '';
       renderPending();
     });
   });
