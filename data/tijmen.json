@@ -2,7 +2,19 @@
   "naam": "Tijmen",
   "kleur": "#0d9488",
   "fases": [
-    { "id": 1, "naam": "Oriëntatie & Onderzoek", "status": "niet-begonnen", "entries": [] },
+    {
+      "id": 1,
+      "naam": "Oriëntatie & Onderzoek",
+      "status": "niet-begonnen",
+      "entries": [
+        {
+          "datum": "2026-09-29",
+          "tekst": "1.1 PROJECT TEAM SAMENSTELLEN\nTijmen - ELA\nThijn - MBW\nMarten - WTB\n\nIk ben verantwoordelijk voor het automatiseringsdeel van het project. Dit houdt in dat ik een functioneel schema, een PLC I/O-layout, proces- en stroomdiagrammen en een testopstelling oplever. Met deze testopstelling kan ik controleren of het project goed werkt voordat het definitief wordt opgeleverd.\n\nDaarnaast ben ik verantwoordelijk voor het elektrotechnische deel van het project. Hiervoor maak ik een elektrisch ontwerp en een EPLAN-tekeningenpakket. Ook zorg ik voor een werkende elektrokast met alle benodigde onderdelen, zoals printpladen en klemmenstrook.\n\n1.2 PAKKET VAN EISEN\n• De wasstraat wordt bestuurd door een Siemens PLC in een aparte besturingskast.\n• De besturingskast is met een kabel verbonden met de wasstraat.\n• De besturingskast bevat beveiligingen, klemmenstroken en kabelconnectoren.\n• De kast heeft een startknop, stopknop, resetknop en noodstop.\n• De noodstop zorgt ervoor dat de machine veilig stopt.\n• De wasstraat bevat een wasrobot die de auto wast.\n• Sensoren detecteren wanneer een auto aanwezig is.\n• Sensoren controleren de positie van de wasrobot.\n• Het waterniveau wordt gemeten.\n• Een verkeerslicht met ledlampen geeft aan wanneer een auto moet stoppen of doorrijden.\n• Met een micro:bit wordt gedetecteerd wanneer een auto aankomt.\n• De micro:bit kan een signaal geven om de wasstraat te starten.\n• De micro:bit kan met een verkeerslicht en geluid aangeven wanneer de auto moet stoppen of doorrijden.\n• De micro:bit geeft een waarschuwing als het waterniveau te hoog of te laag is.\n• De micro:bits communiceren met elkaar via de radiofunctie.\n• Op een OLED-scherm zijn de status van de wasbeurt, het waterniveau en eventuele storingen te zien.\n• Bij een storing wordt een waarschuwing gegeven.\n• Alle onderdelen worden getest om te controleren of ze goed en veilig werken.\n\n1.3 INTERVIEW DE OPDRACHTGEVER\nWelke elektrische onderdelen moeten worden aangesloten?\nAntwoord: De startknop, stopknop, resetknop, noodstop, sensoren, signaallampen en kabels.\n\nWaarvoor gebruiken we de micro:bit?\nAntwoord: Ik gebruik de micro:bit om bijvoorbeeld een auto te detecteren of het waterniveau te meten.\n\nHoe kan ik zien of de wasstraat werkt?\nAntwoord: Met ledlampjes en een OLED-scherm kunnen we zien wat de status van de wasstraat is en of er storingen zijn.",
+          "fotos": [],
+          "pdfs": []
+        }
+      ]
+    },
     { "id": 2, "naam": "Plan van Aanpak", "status": "niet-begonnen", "entries": [] },
     { "id": 3, "naam": "Ontwerp", "status": "niet-begonnen", "entries": [] },
     { "id": 4, "naam": "Prototype", "status": "niet-begonnen", "entries": [] },
